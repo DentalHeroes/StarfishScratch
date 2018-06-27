@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<body>
+<title>Weather</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+
+     $(document).ready(function () {
+          $("#submitWeather").click(function () {
+                    return getWeather();
+            });
+        });
+ 
+     function getWeather() {
+        $.ajax({
+            url: 'http://api.openweathermap.org/data/2.5/weather?q=' + $("#cityInput").val() + "," + $("#countryInput").val() + "&appid=3c90ef0d527512b433ebf00ac0321e72",
+            type: 'GET',
+            dataType: 'jsonp',
+            success: function (data) {
+                var wrapper = $("#WeatherWrapper");
+                wrapper.empty();
+                wrapper.append("<div class='city'> <p>Place: " + data.name + ", " + data.sys.country + "</p></div>");
+                wrapper.append(createWeatherWidg(data));
+            },
+            error: function () {
+                alert('Failed!');
+            }
+ 
+        });
+    }
+ 
+      //Prints result from the weatherapi, receiving as param an object
+        function createWeatherWidg(data) {
+        return "<div class='pressure'> <p>Temperature: " + (data.main.temp - 273.15).toFixed(2) + " C</p></div>"+
+                "<div class='description'> <p>Title: " + data.weather[0].main + "</p></div>" +
+                "<div class='description'> <p>Description: " + data.weather[0].description + "</p></div>" +
+                "<div class='wind'> <p>Wind Speed: " + data.wind.speed + "</p></div>" +
+                "<div class='humidity'> <p>Humidity: " + data.main.humidity + "%</p></div>" +
+                "<div class='pressure'> <p>Pressure: " + data.main.pressure + " hpa</p></div>";
+    }
+
+    </script>
+	
+</head>
+<body>
+
+<h1>Will's Wacky Weather App</h1>
+          <div id="UserArea">
+            <div id="stateWrapper">
+                <input type="text" id="cityInput" placeholder="Enter a city"/>
+            </div>
+            <br/>
+            <div id="countryWrapper">
+                 <input type="text" id="countryInput" placeholder="Enter a Country"/>
+            </div>
+            <br/>
+            <div id="buttonArea">
+                <input type="submit" id="submitWeather"/>
+            </div>
+        </div>
+        <!- USED TO SHOW RESULT -!>
+        <div id="WeatherWrapper">
+        </div>
+       
+    </body>
+</html>
