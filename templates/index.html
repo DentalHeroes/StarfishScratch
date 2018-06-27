@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="../styles/stylesheet.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="./mainWeather.js"></script>
+<script>
+     $(document).ready(function() {
+       var weather = new mainWeather();
+     });
+</script>
+
+</head>
+<body>
+    <div class="col-xs-12 col-sm-2"></div>
+    <div class="col-xs-12 col-sm-8">
+        <h1>RES' Wacky Weather App</h1>
+        <div id="WeatherWrapper" class="col-xs-12 col-sm-6">
+        </div>
+        <div class="col-xs-12 col-sm-6">
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-2"></div>
+
+<!-- <h1 class="col-xs-1">Will's Wacky Weather App</h1>
+          <div id="UserArea" class="col-xs-6">
+            <div id="stateWrapper">
+                <input type="text" id="cityInput" placeholder="Enter a city"/>
+            </div>
+            <br/>
+            <div id="countryWrapper">
+                 <input type="text" id="countryInput" placeholder="Enter a Country"/>
+            </div>
+            <br/>
+            <div id="buttonArea">
+                <input type="submit" id="submitWeather"/>
+            </div>
+        </div>
+        <!- USED TO SHOW RESULT -!>
+        <div id="WeatherWrapper" class="col-xs-6"></div> -->
+
+    </body>
+</html>
