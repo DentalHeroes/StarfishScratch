@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="../styles/stylesheet.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="./mainWeather.js"></script>
+<script>
+    var imageNames = [
+        '1.jpg',
+        '2.jpg',
+        '3.jpg',
+        '4.jpg',
+        '5.jpg',
+        '6.jpg',
+    ]
+
+     $(document).ready(function() {
+         setImageArray(imageNames);
+         getBackgroundImage();
+         var weather = new mainWeather();
+     });
+</script>
+
+</head>
+    <body>
+        <img id='background-image' />
+        <div class='col-xs-12' id='weather-container'>
+            <div class="col-xs-12 col-sm-2"></div>
+            <div id="outside-weather-container" class="col-xs-12 col-sm-8 hidden">
+                <h1>RES' Wacky Weather App</h1>
+                <span id='weather-icon'></span>
+                <p id='weather-desc'></p>
+                <p id='weather-location'></p>
+                <div id="WeatherWrapper" class="col-xs-12 col-sm-6 weather-wrapper">
+                </div>
+                <div class="col-xs-12 col-sm-6 weather-wrapper">
+                    <p class='title'>Inside</p>
+                </div>
+            </div>
+            <div id='loading' class='col-xs-12 col-sm-8'>
+                <h1>RES' Wacky Weather App</h1>
+                <span class='fas fa-spinner fa-spin'></span>
+                <p>Loading...</p>
+            </div>
+            <div class="col-xs-12 col-sm-2"></div>
+        </div>
+    </body>
+</html>
