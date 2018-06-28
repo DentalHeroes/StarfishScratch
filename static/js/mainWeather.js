@@ -6,35 +6,18 @@ class mainWeather {
 
         this.showPosition = this.showPosition.bind(this);
         this.getWeather = this.getWeather.bind(this);
-        this.getLocation();
+		this.getLocation();
     }
 
     getLocation() {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(this.showPosition);
+            navigator.geolocation.getCurrentPosition(this.getWeather);
         }
     }
-
-    showPosition(position) {
+	
+	getWeather(position) {
         $.ajax({
-            url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + position.coords.latitude + ','+ position.coords.longitude + '&sensor=true',
-            type: 'get',
-            success: function (data) {
-                var addressArray = data.results[5].formatted_address.split(', ');
-                this.city = addressArray[0];
-                this.state = addressArray[1];
-                this.zip = data.results[2].formatted_address.split(', ')[1].slice(3);
-                this.getWeather();
-            }.bind(this),
-            error: function (error) {
-                alert("We're sorry, there seems to be an error, please try again")
-            }
-        })
-    }
-
-    getWeather() {
-        $.ajax({
-            url: 'http://api.openweathermap.org/data/2.5/weather?zip=' + this.zip + ',us' + "&appid=3c90ef0d527512b433ebf00ac0321e72",
+            url: 'https://api.openweathermap.org/data/2.5/weather?lat=' + position.coords.latitude + '&lon=' + position.coords.longitude +"&appid=3c90ef0d527512b433ebf00ac0321e72",
             type: 'GET',
             dataType: 'jsonp',
             success: function (data) {
@@ -99,7 +82,8 @@ class mainWeather {
     createWeatherWidg(data) {
         var isDay = this.isDaytime(new Date(data.sys.sunrise), new Date(data.sys.sunset));
         var mappedData = this.mapWeather(data.weather[0].description, isDay);
-        var location = this.city + ', ' + this.state;
+		this.city = data.name;
+        var location = this.city;// + ', ' + this.state;
 
         $('#weather-icon').replaceWith(mappedData.icon);
         $('#weather-desc').text(mappedData.description);
@@ -132,7 +116,7 @@ function setImageArray(arr) {
     arr.forEach(function(imageUrl) {
         var image = new Image();
         image.id = 'background-image';
-        image.src = "/static/assets/" + imageUrl;
+        image.src = '/static/assets/' + imageUrl;
         images.push(image);
     })
 };
