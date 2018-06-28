@@ -7,6 +7,7 @@ class mainWeather {
         this.getWeather = this.getWeather.bind(this);
         this.getSensorData = this.getSensorData.bind(this);
         this.getLocation();
+        this.getSensorData();
     }
 
     getLocation() {
