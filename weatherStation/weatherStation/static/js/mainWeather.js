@@ -4,7 +4,6 @@ class mainWeather {
         this.state;
         this.zip;
 
-        this.showPosition = this.showPosition.bind(this);
         this.getWeather = this.getWeather.bind(this);
         this.getSensorData = this.getSensorData.bind(this);
         this.getLocation();
