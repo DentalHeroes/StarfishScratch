@@ -9,39 +9,44 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="./mainWeather.js"></script>
 <script>
+    var imageNames = [
+        '1.jpg',
+        '2.jpg',
+        '3.jpg',
+        '4.jpg',
+        '5.jpg',
+        '6.jpg',
+    ]
+
      $(document).ready(function() {
-       var weather = new mainWeather();
+         setImageArray(imageNames);
+         getBackgroundImage();
+         var weather = new mainWeather();
      });
 </script>
 
 </head>
-<body>
-    <div class="col-xs-12 col-sm-2"></div>
-    <div class="col-xs-12 col-sm-8">
-        <h1>RES' Wacky Weather App</h1>
-        <div id="WeatherWrapper" class="col-xs-12 col-sm-6">
-        </div>
-        <div class="col-xs-12 col-sm-6">
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-2"></div>
-
-<!-- <h1 class="col-xs-1">Will's Wacky Weather App</h1>
-          <div id="UserArea" class="col-xs-6">
-            <div id="stateWrapper">
-                <input type="text" id="cityInput" placeholder="Enter a city"/>
+    <body>
+        <img id='background-image' />
+        <div class='col-xs-12' id='weather-container'>
+            <div class="col-xs-12 col-sm-2"></div>
+            <div id="outside-weather-container" class="col-xs-12 col-sm-8 hidden">
+                <h1>RES' Wacky Weather App</h1>
+                <span id='weather-icon'></span>
+                <p id='weather-desc'></p>
+                <p id='weather-location'></p>
+                <div id="WeatherWrapper" class="col-xs-12 col-sm-6 weather-wrapper">
+                </div>
+                <div class="col-xs-12 col-sm-6 weather-wrapper">
+                    <p class='title'>Inside</p>
+                </div>
             </div>
-            <br/>
-            <div id="countryWrapper">
-                 <input type="text" id="countryInput" placeholder="Enter a Country"/>
+            <div id='loading' class='col-xs-12 col-sm-8'>
+                <h1>RES' Wacky Weather App</h1>
+                <span class='fas fa-spinner fa-spin'></span>
+                <p>Loading...</p>
             </div>
-            <br/>
-            <div id="buttonArea">
-                <input type="submit" id="submitWeather"/>
-            </div>
+            <div class="col-xs-12 col-sm-2"></div>
         </div>
-        <!- USED TO SHOW RESULT -!>
-        <div id="WeatherWrapper" class="col-xs-6"></div> -->
-
     </body>
 </html>
