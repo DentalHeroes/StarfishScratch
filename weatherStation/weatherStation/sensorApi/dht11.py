@@ -1,20 +1,8 @@
-##########################################################################
-# Filename    : dht11.py
-# Description : test for SunFoudner DHT11 humiture & temperature module
-# Author      : Alan
-# Website     : www.osoyoo.com
-# Update      : 2017/07/06
-##########################################################################
 import RPi.GPIO as GPIO
 import time
 
-#DHT11 connect to BCM_GPIO14
+#DHT11 connected to BCM_GPIO14
 DHTPIN = 14
-LEDPIN = 17
-BUZZPIN = 18
-
-
-GPIO.setmode(GPIO.BCM)
 
 MAX_UNCHANGE_COUNT = 100
 
@@ -24,10 +12,10 @@ STATE_DATA_FIRST_PULL_DOWN = 3
 STATE_DATA_PULL_UP = 4
 STATE_DATA_PULL_DOWN = 5
 
-def read_dht11_dat():
+GPIO.setmode(GPIO.BCM)
+
+def getData():
     GPIO.setup(DHTPIN, GPIO.OUT)
-    GPIO.setup(LEDPIN, GPIO.OUT, initial=GPIO.LOW)
-    GPIO.setup(BUZZPIN, GPIO.OUT, initial=GPIO.HIGH)
     GPIO.output(DHTPIN, GPIO.HIGH)
     time.sleep(0.05)
     GPIO.output(DHTPIN, GPIO.LOW)
@@ -85,7 +73,6 @@ def read_dht11_dat():
                 continue
     if len(lengths) != 40:
         print "Data not good, skip"
-	GPIO.output(LEDPIN, GPIO.HIGH)
         return False
 
     shortest_pull_up = min(lengths)
@@ -114,31 +101,6 @@ def read_dht11_dat():
     checksum = (the_bytes[0] + the_bytes[1] + the_bytes[2] + the_bytes[3]) & 0xFF
     if the_bytes[4] != checksum:
         print "Data not good, skip"
-	GPIO.output(LEDPIN, GPIO.HIGH)
         return False
 
     return the_bytes[0], the_bytes[2]
-
-def main():
-    print "Raspberry Pi wiringPi DHT11 Temperature test program\n"
-    while True:
-        result = read_dht11_dat()
-        if result:
-	    #GPIO.output(LEDPIN, GPIO.LOW)
-            humidity, temperature = result
-	    ftemp = temperature * 1.8 + 32
-	    GPIO.output(BUZZPIN, GPIO.LOW)
-            print "humidity: %s %%,  Temperature: %s f" % (humidity, ftemp)
-	    time.sleep(0.2)
-	    GPIO.output(BUZZPIN, GPIO.HIGH)
-        time.sleep(2)
-
-def destroy():
-    GPIO.cleanup()
-
-if __name__ == '__main__':
-    try:
-        main()
-    except KeyboardInterrupt:
-        destroy() 
-
