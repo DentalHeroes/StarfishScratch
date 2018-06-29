@@ -27,6 +27,7 @@ class mainWeather {
                 wrapper.append(this.createWeatherWidg(data));
 
                 $('#outside-weather-container').removeClass('hidden');
+				 $('#alert-wrapper').removeClass('hidden');
                 $('#loading').addClass('hidden');
             }.bind(this),
             error: function (error) {
@@ -50,6 +51,7 @@ class mainWeather {
             }
         });
     }
+	
 
     mapWeather(description, isDay) {
         switch (description) {
@@ -147,4 +149,23 @@ function setImageArray(arr) {
 function getBackgroundImage() {
     var whichImage = Math.round(Math.random()*(images.length-1));
     $('#background-image').replaceWith(images[whichImage])
+};
+
+function sendAlert() {
+    $.ajax({
+        url: '/alert',
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+           if (data.result == 1){
+			   alert("success");
+		   } else {
+			   alert("alert failed");
+		   }
+		   
+        }.bind(this),
+        error: function (error) {
+            alert('Failed!');
+        }
+    });
 };

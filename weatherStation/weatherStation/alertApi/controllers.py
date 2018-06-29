@@ -1,7 +1,9 @@
 from flask import Blueprint
+from flask import jsonify
+import alert
 
 alertApi = Blueprint('alertApi', __name__)
 
 @alertApi.route('/')
 def index():
-    return "<h1>Alert API</h1>"
+   return jsonify(alert.sendAlert());

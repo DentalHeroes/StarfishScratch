@@ -12,7 +12,7 @@ import RPi.GPIO as GPIO
 import time
 
 # Set #18 as buzzer pin
-BuzzerPin = 18
+BuzzerPin = 23
 
 def print_message():
     print ("|**************************************|")
