@@ -158,7 +158,7 @@ function sendAlert() {
         dataType: 'json',
         success: function (data) {
            if (data.result == 1){
-			   alert("success");
+			   //alert("success");
 		   } else {
 			   alert("alert failed");
 		   }

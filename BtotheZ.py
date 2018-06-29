@@ -634,12 +634,12 @@ if __name__ == '__main__':		# Program start from here
 		#print "Popcorn Melody"
 		#play(popcorn_melody, popcorn_tempo, 0.50, 1.000)
 		#time.sleep(2)
-		print "Star Wars Theme"
-		play(star_wars_melody, star_wars_tempo, 0.50, 1.000)
-		time.sleep(2)
-		#print "Super Mario Theme"
-		#play(melody, tempo, 1.3, 0.800)
+		#print "Star Wars Theme"
+		#play(star_wars_melody, star_wars_tempo, 0.50, 1.000)
 		#time.sleep(2)
+		print "Super Mario Theme"
+		play(melody, tempo, 1.3, 0.800)
+		time.sleep(2)
 		#print "Super Mario Underworld Theme"
 		#play(underworld_melody, underworld_tempo, 1.3, 0.800)
 		#time.sleep(2)
