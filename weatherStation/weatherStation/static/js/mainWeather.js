@@ -86,6 +86,7 @@ class mainWeather {
                     icon: '<span id="weather-icon" class="fas fa-tint"></span>'
                 }
             case 'thunderstorm':
+	    case 'thunderstorm with heavy rain':
                 return {
                     description: 'Thunderstorm',
                     icon: '<span id="weather-icon" class="fas fa-bolt"></span>'
