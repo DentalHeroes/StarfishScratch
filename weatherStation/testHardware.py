@@ -22,9 +22,9 @@ def beep(repeat):
 	for i in range(0, repeat):
 		for pulse in range(60):
 			GPIO.output(BUZZPIN, GPIO.LOW)
-			time.sleep(0.0005)
+			time.sleep(0.1)
 			GPIO.output(BUZZPIN, GPIO.HIGH)
-			time.sleep(0.0005)
+			time.sleep(0.1)
 		time.sleep(0.02)
 
 def getData():
