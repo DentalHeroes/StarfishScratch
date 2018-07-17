@@ -11,10 +11,28 @@ class mainWeather {
     }
 
     getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(this.getWeather);
-        }
-    }
+       
+		$.ajax({
+			url:"http://gd.geobytes.com/GetCityDetails?callback=?&filter=US",
+			dataType: 'json',
+			success: function (data, status) {
+				if(status === "success") {
+					if(data.geobyteslatitude) {
+						var pos = { coords : { latitude : data.geobyteslatitude, longitude : data.geobyteslongitude } };
+						this.getWeather(pos);
+					} else {
+						manualZip();
+					}
+				}else {
+						manualZip();
+				}
+			}.bind(this),
+			error: function (error){
+				manualZip();
+			}
+		});
+	}
+   
 
 	getWeather(position) {
         $.ajax({
@@ -110,7 +128,7 @@ class mainWeather {
         $('#weather-location').text(location);
 
         return "<p class='title'>Outside</p>" +
-                "<p>Temperature: " + (data.main.temp - 273.15).toFixed(2) + " C</p>"+
+                "<p>Temperature: " + (data.main.temp  * 9/5 - 459.67).toFixed(2) + " F</p>"+
                 "<p>Wind Speed: " + data.wind.speed + "</p>" +
                 "<p>Humidity: " + data.main.humidity + "%</p>" +
                 "<p>Pressure: " + data.main.pressure + " hpa</p>";
@@ -118,7 +136,7 @@ class mainWeather {
 
     createSensorDataWidg(data) {
         return "<p class='title'>Inside</p>" +
-               "<p>Temperature: " + data.temp + " C</p>" +
+               "<p>Temperature: " + (data.temp === 0 ? 0 : ((data.temp * 9 / 5) - 32)) + " F</p>" +
                "<p>Humidity: " + data.humidity + "%</p>";
     }
 
@@ -170,3 +188,134 @@ function sendAlert() {
         }
     });
 };
+
+function manualZip(){
+	var wrapper = $("#WeatherWrapper");
+    wrapper.empty();
+	var div = document.createElement("div");
+	var zip = document.createElement("input");
+	zip.type = "text";
+	zip.id = "zip";
+	zip.placeholder = "enter zip code";
+	zip.required = true;
+	var br = document.createElement("br");
+	var submitZip = document.createElement("button");
+	submitZip.id = "submitZip";
+	submitZip.setAttribute('onclick', 'getWeather()');
+	submitZip.innerHTML = "Get Weather";
+	submitZip.setAttribute('class', 'btn btn-primary');
+	submitZip.style.margin = '15px';
+	div.append(zip);
+	div.append(br);
+	div.append(submitZip)
+    wrapper.append(div);
+	 $('#outside-weather-container').removeClass('hidden');
+	 $('#alert-wrapper').removeClass('hidden');
+	$('#loading').addClass('hidden');
+};
+
+
+function getWeather() {
+	var zipcode = $('#zip').val();
+        $.ajax({
+            url: 'https://api.openweathermap.org/data/2.5/weather?zip='+ zipcode +",us&appid=3c90ef0d527512b433ebf00ac0321e72",
+            type: 'GET',
+            dataType: 'jsonp',
+            success: function (data) {
+                var wrapper = $("#WeatherWrapper");
+                wrapper.empty();
+                wrapper.append(createWeatherWidg(data));
+
+                $('#outside-weather-container').removeClass('hidden');
+				 $('#alert-wrapper').removeClass('hidden');
+                $('#loading').addClass('hidden');
+            }.bind(this),
+            error: function (error) {
+                alert('Failed!');
+            }
+        });
+    }
+
+   
+
+ function   mapWeather(description, isDay) {
+        switch (description) {
+            case 'clear sky':
+                if (isDay) {
+                    return {
+                        description: 'Sunny',
+                        icon: '<span id="weather-icon" class="fas fa-sun"></span>'
+                    }
+                } else {
+                    return {
+                        description: 'Clear Skies',
+                        icon: '<span id="weather-icon" class="fas fa-moon"></span>'
+                    }
+                }
+            case 'few clouds':
+                return {
+                    description: 'Partly Cloudy',
+                    icon: '<span id="weather-icon" class="fas fa-cloud"></span>'
+                }
+            case 'scattered clouds':
+            case 'broken clouds':
+            case 'mist':
+                return {
+                    description: 'Cloudy',
+                    icon: '<span id="weather-icon" class="fas fa-cloud"></span>'
+                }
+            case 'shower rain':
+            case 'rain':
+                return {
+                    description: 'Rainy',
+                    icon: '<span id="weather-icon" class="fas fa-tint"></span>'
+                }
+            case 'thunderstorm':
+	    case 'thunderstorm with heavy rain':
+                return {
+                    description: 'Thunderstorm',
+                    icon: '<span id="weather-icon" class="fas fa-bolt"></span>'
+                }
+            case 'snow':
+                return {
+                    description: 'Snowing',
+                    icon: '<span id="weather-icon" class="fas fa-snowflake"></span>'
+                }
+        }
+    }
+
+ function   createWeatherWidg(data) {
+        var isDay = isDaytime(new Date(data.sys.sunrise), new Date(data.sys.sunset));
+        var mappedData = mapWeather(data.weather[0].description, isDay);
+        var location = data.name;// + ', ' + this.state;
+
+        $('#weather-icon').replaceWith(mappedData.icon);
+        $('#weather-desc').text(mappedData.description);
+        $('#weather-location').text(location);
+
+        return "<p class='title'>Outside</p>" +
+				//convert Kelvin to Fahrenheit
+                "<p>Temperature: " + (data.main.temp * 9/5 - 459.67).toFixed(2) + " F</p>"+
+                "<p>Wind Speed: " + data.wind.speed + "</p>" +
+                "<p>Humidity: " + data.main.humidity + "%</p>" +
+                "<p>Pressure: " + data.main.pressure + " hpa</p>";
+    }
+
+function    createSensorDataWidg(data) {
+        return "<p class='title'>Inside</p>" +
+               "<p>Temperature: " + data.temp + " C</p>" +
+               "<p>Humidity: " + data.humidity + "%</p>";
+    }
+
+function    isDaytime(sunrise, sunset) {
+        var current = new Date();
+        var currentSec = getDaySeconds(current);
+        var sunriseSec = getDaySeconds(sunrise);
+        var sunsetSec = getDaySeconds(sunset);
+
+        return currentSec > sunriseSec && currentSec < sunsetSec;
+    }
+
+function    getDaySeconds(time) {
+        return time.getSeconds() + (60 * (time.getMinutes() + (60 * time.getHours())))
+    }
