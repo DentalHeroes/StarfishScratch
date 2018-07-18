@@ -79,7 +79,7 @@ class DTH11:
 
     def __init__(self, pin):
         self.__pin = pin
-        GPIO.setmode(GPIO.BCM)
+        GPIO.setmode(GPIO.BOARD)
 
     def read(self):
         # Set pin as OUTPUT
@@ -98,6 +98,7 @@ class DTH11:
 
         # Parse the rawState into pull up signal lengths
         pullUpLengths = self.__parseRawState(rawState)
+        print (pullUpLengths)
 
         # If we do not have 40 bits at this point, then there was some kind of
         # problem
@@ -122,7 +123,7 @@ class DTH11:
         # specs state that while there are places for the fractional parts of
         # each number (used by other similar sensors), they are not actually
         # used.
-        return DHT11Result(DHT11Result.ERR_NONE, data[2], data[0])
+        return DHT11Result(DHT11Result.ERR_NONE, data[0], data[2])
 
     # Sends the output to the pin and then sleeps
     def __sendAndSleep(self, output, seconds):
