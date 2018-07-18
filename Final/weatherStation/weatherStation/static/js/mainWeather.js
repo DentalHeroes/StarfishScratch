@@ -70,6 +70,8 @@ function    getSensorData() {
 	//clear the wrapper of any content
 	wrapper.empty();
 	$.ajax({
+		// notice how the url is different. It doesn't include 'http://' which
+		// tells us that we're calling an API on our internal server.
 		url: '/sensor',
 		type: 'GET',
 		dataType: 'json',
@@ -83,7 +85,15 @@ function    getSensorData() {
 			clearLoadingScreen();
 		},
 		error: function (error) {
-			alert('Failed!');
+			alert('Failed!');			
+			//create refresh button
+			var button = '<p><button id="submitZip" onclick="getSensorData()" class="btn btn-primary" >Refresh</button></p>';
+			//bind the SensorDataWrapper element to a variable
+			var wrapper = $("#SensorDataWrapper");
+			//clear the wrapper of any content
+			wrapper.empty();
+			//create the sensor data content and append it to the wrapper
+			wrapper.append(button);
 		}
 	});
 }
@@ -207,6 +217,8 @@ function getBackgroundImage() {
 function sendAlert() {
 	//uses ajax to send an http Get request to the Alert API
     $.ajax({
+	// notice how the url is different. It doesn't include 'http://' which
+	// tells us that we're calling an API on our internal server.
         url: '/alert',
         type: 'GET'
     });
