@@ -131,12 +131,12 @@ class mainWeather {
                 "<p>Temperature: " + (data.main.temp  * 9/5 - 459.67).toFixed(2) + " F</p>"+
                 "<p>Wind Speed: " + data.wind.speed + "</p>" +
                 "<p>Humidity: " + data.main.humidity + "%</p>" +
-                "<p>Pressure: " + data.main.pressure + " hpa</p>";
+                "<p>Pressure: " + (data.main.pressure/ 33.863886666667).toFixed(2) + " in</p>";
     }
 
     createSensorDataWidg(data) {
         return "<p class='title'>Inside</p>" +
-               "<p>Temperature: " + (data.temp === 0 ? 0 : ((data.temp * 9 / 5) - 32)) + " F</p>" +
+               "<p>Temperature: " + (data.temp === 0 ? 0 : ((data.temp * 1.8) + 32).toFixed(2)) + " F</p>" +
                "<p>Humidity: " + data.humidity + "%</p>";
     }
 
