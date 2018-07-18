@@ -24,6 +24,7 @@ function    getLocation() {
 
 	//Makes an ajax call to the openweather api
 function	getWeather(locationType) {
+	//store locationType into a hidden field for refreshing weather
 	$('#locationType').val(locationType);
 	//bind the WeatherWrapper element to a variable
 	var wrapper = $("#WeatherWrapper");
@@ -46,6 +47,7 @@ function	getWeather(locationType) {
 	});
 }
 
+//retrieves stored locationType and uses it to getWeather
 function refreshWeather(){
 	var locationType = $('#locationType').val();
 	getWeather(locationType);
@@ -63,120 +65,120 @@ function clearLoadingScreen(){
 
 	// uses ajax call to get sensor data
 function    getSensorData() {
-		//bind the SensorDataWrapper element to a variable
-        var wrapper = $("#SensorDataWrapper");
-		//clear the wrapper of any content
-        wrapper.empty();
-        $.ajax({
-            url: '/sensor',
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-				//bind the SensorDataWrapper element to a variable
-                var wrapper = $("#SensorDataWrapper");
-				//clear the wrapper of any content
-                wrapper.empty();
-				//create the sensor data content and append it to the wrapper
-                wrapper.append(createSensorDataWidg(data));
-				clearLoadingScreen();
-            },
-            error: function (error) {
-                alert('Failed!');
-            }
-        });
-    }
+	//bind the SensorDataWrapper element to a variable
+	var wrapper = $("#SensorDataWrapper");
+	//clear the wrapper of any content
+	wrapper.empty();
+	$.ajax({
+		url: '/sensor',
+		type: 'GET',
+		dataType: 'json',
+		success: function (data) {
+			//bind the SensorDataWrapper element to a variable
+			var wrapper = $("#SensorDataWrapper");
+			//clear the wrapper of any content
+			wrapper.empty();
+			//create the sensor data content and append it to the wrapper
+			wrapper.append(createSensorDataWidg(data));
+			clearLoadingScreen();
+		},
+		error: function (error) {
+			alert('Failed!');
+		}
+	});
+}
 	
 //Uses a switch statement to map different weather 
 //conditions to their appropriate weather icon
 function	mapWeather(description, isDay) {
-				switch (description) {
-					case 'clear sky':
-						if (isDay) {
-							return {
-								description: 'Sunny',
-								icon: '<span id="weather-icon" class="fas fa-sun"></span>'
-							}
-						} else {
-							return {
-								description: 'Clear Skies',
-								icon: '<span id="weather-icon" class="fas fa-moon"></span>'
-							}
-						}
-					case 'few clouds':
-						return {
-							description: 'Partly Cloudy',
-							icon: '<span id="weather-icon" class="fas fa-cloud"></span>'
-						}
-					case 'scattered clouds':
-					case 'broken clouds':
-					case 'mist':
-						return {
-							description: 'Cloudy',
-							icon: '<span id="weather-icon" class="fas fa-cloud"></span>'
-						}
-					case 'shower rain':
-					case 'rain':
-						return {
-							description: 'Rainy',
-							icon: '<span id="weather-icon" class="fas fa-tint"></span>'
-						}
-					case 'thunderstorm':
-				case 'thunderstorm with heavy rain':
-						return {
-							description: 'Thunderstorm',
-							icon: '<span id="weather-icon" class="fas fa-bolt"></span>'
-						}
-					case 'snow':
-						return {
-							description: 'Snowing',
-							icon: '<span id="weather-icon" class="fas fa-snowflake"></span>'
-						}
+	switch (description) {
+		case 'clear sky':
+			if (isDay) {
+				return {
+					description: 'Sunny',
+					icon: '<span id="weather-icon" class="fas fa-sun"></span>'
+				}
+			} else {
+				return {
+					description: 'Clear Skies',
+					icon: '<span id="weather-icon" class="fas fa-moon"></span>'
 				}
 			}
+		case 'few clouds':
+			return {
+				description: 'Partly Cloudy',
+				icon: '<span id="weather-icon" class="fas fa-cloud"></span>'
+			}
+		case 'scattered clouds':
+		case 'broken clouds':
+		case 'mist':
+			return {
+				description: 'Cloudy',
+				icon: '<span id="weather-icon" class="fas fa-cloud"></span>'
+			}
+		case 'shower rain':
+		case 'rain':
+			return {
+				description: 'Rainy',
+				icon: '<span id="weather-icon" class="fas fa-tint"></span>'
+			}
+		case 'thunderstorm':
+	case 'thunderstorm with heavy rain':
+			return {
+				description: 'Thunderstorm',
+				icon: '<span id="weather-icon" class="fas fa-bolt"></span>'
+			}
+		case 'snow':
+			return {
+				description: 'Snowing',
+				icon: '<span id="weather-icon" class="fas fa-snowflake"></span>'
+			}
+	}
+}
 
 function	createWeatherWidg(data) {
 				
-				var isDay = this.isDaytime(new Date(data.sys.sunrise), new Date(data.sys.sunset));
-				var mappedData = this.mapWeather(data.weather[0].description, isDay);
-				var location = data.name;
+	var isDay = this.isDaytime(new Date(data.sys.sunrise), new Date(data.sys.sunset));
+	var mappedData = this.mapWeather(data.weather[0].description, isDay);
+	var location = data.name;
 
-				$('#weather-icon').replaceWith(mappedData.icon);
-				$('#weather-desc').text(mappedData.description);
-				$('#weather-location').text(location);
+	$('#weather-icon').replaceWith(mappedData.icon);
+	$('#weather-desc').text(mappedData.description);
+	$('#weather-location').text(location);
 
-				return "<p class='title'>Outside</p>" +
-						//convert Kelvin to farenheit
-						"<p>Temperature: " + (data.main.temp  * 9/5 - 459.67).toFixed(2) + " F</p>"+
-						"<p>Wind Speed: " + data.wind.speed + "</p>" +
-						"<p>Humidity: " + data.main.humidity + "%</p>" +
-						//convert hectopascals to inches of mercury
-						"<p>Pressure: " + (data.main.pressure/ 33.863886666667).toFixed(2) + " in</p>" +
-						'<p><button id="submitZip" onclick="refreshWeather()" class="btn btn-primary" >Refresh</button></p>';
-			}
+	return "<p class='title'>Outside</p>" +
+			//convert Kelvin to farenheit
+			"<p>Temperature: " + (data.main.temp  * 9/5 - 459.67).toFixed(2) + " F</p>"+
+			"<p>Wind Speed: " + data.wind.speed + "</p>" +
+			"<p>Humidity: " + data.main.humidity + "%</p>" +
+			//convert hectopascals to inches of mercury
+			"<p>Pressure: " + (data.main.pressure/ 33.863886666667).toFixed(2) + " in</p>" +
+			'<p><button id="submitZip" onclick="refreshWeather()" class="btn btn-primary" >Refresh</button></p>';
+}
 
 function	createSensorDataWidg(data) {
-				return "<p class='title'>Inside</p>" +
-						//if temp is zero then output zero, otherwise convert celcius to farenheit
-					   "<p>Temperature: " + (data.temp === 0 ? 0 : ((data.temp * 9 / 5) + 32).toFixed(2)) + " F</p>" +
-					   "<p>Humidity: " + data.humidity + "%</p>" +
-					   '<p><button id="submitZip" onclick="getSensorData()" class="btn btn-primary" >Refresh</button></p>';
-			}
+	return "<p class='title'>Inside</p>" +
+			//if temp is zero then output zero, otherwise convert celcius to farenheit
+		   "<p>Temperature: " + (data.temp === 0 ? 0 : ((data.temp * 9 / 5) + 32).toFixed(2)) + " F</p>" +
+		   "<p>Humidity: " + data.humidity + "%</p>" +
+		   '<p><button id="submitZip" onclick="getSensorData()" class="btn btn-primary" >Refresh</button></p>';
+}
 
 			// compares the current time to sunrise and sunset times
 			// to determine if it is currently daytime
 function	isDaytime(sunrise, sunset) {
-				var current = new Date();
-				var currentSec = this.getDaySeconds(current);
-				var sunriseSec = this.getDaySeconds(sunrise);
-				var sunsetSec = this.getDaySeconds(sunset);
+	var current = new Date();
+	var currentSec = this.getDaySeconds(current);
+	var sunriseSec = this.getDaySeconds(sunrise);
+	var sunsetSec = this.getDaySeconds(sunset);
 
-				return currentSec > sunriseSec && currentSec < sunsetSec;
-			}
+	return currentSec > sunriseSec && currentSec < sunsetSec;
+}
 
 			//converts a current time into the number of total seconds since 12 am
 function	getDaySeconds(time) {
-				return time.getSeconds() + (60 * (time.getMinutes() + (60 * time.getHours())))
-			}
+	return time.getSeconds() + (60 * (time.getMinutes() + (60 * time.getHours())))
+}
 	
 	
  
@@ -217,15 +219,16 @@ function getWeatherLocation(){
 	
 	//check if a zipcode was entered
 	if (zipcode.length === 0){
-		//if not get location from ip
+		//if no zipcode was entered get location from ip
 		getLocation();
 	}
-	//validate that the zipcode is a 5 digit number
+	//if zipcode is not valid 5 digit number alert user
 	else if (isNaN(zipcode) || zipcode.length !== 5 ){
 		alert("Please enter a valid zipcode");
 		//clear out zipcode field
 		$('#zip').val();
 	} else {
+		//get weather with valid zipcode
 		var locationType = 'zip=' + zipcode + ',us';
 		getWeather(locationType);
 	}
