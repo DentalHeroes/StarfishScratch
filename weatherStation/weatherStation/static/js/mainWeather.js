@@ -1,8 +1,3 @@
-function mainWeather() {
-    
-	//this.getLocation();
-	getSensorData();
-}
 
 function    getLocation() {
 	//make an ajax call to an ip geolocation api
@@ -140,10 +135,10 @@ function	mapWeather(description, isDay) {
 			}
 
 function	createWeatherWidg(data) {
+				
 				var isDay = this.isDaytime(new Date(data.sys.sunrise), new Date(data.sys.sunset));
 				var mappedData = this.mapWeather(data.weather[0].description, isDay);
-				this.city = data.name;
-				var location = this.city;// + ', ' + this.state;
+				var location = data.name;
 
 				$('#weather-icon').replaceWith(mappedData.icon);
 				$('#weather-desc').text(mappedData.description);
@@ -215,11 +210,21 @@ function sendAlert() {
     });
 };
 
+
 function getWeatherLocation(){
+	//get zipcode from user input
 	var zipcode = $('#zip').val();
-	if (isNaN(zipcode) || zipcode.length != 5 )
-	{
+	
+	//check if a zipcode was entered
+	if (zipcode.length === 0){
+		//if not get location from ip
 		getLocation();
+	}
+	//validate that the zipcode is a 5 digit number
+	else if (isNaN(zipcode) || zipcode.length !== 5 ){
+		alert("Please enter a valid zipcode");
+		//clear out zipcode field
+		$('#zip').val();
 	} else {
 		var locationType = 'zip=' + zipcode + ',us';
 		getWeather(locationType);

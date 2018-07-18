@@ -22,10 +22,11 @@
         '6.jpg',
     ]
 
+	//this function will fire when the document is loaded and ready
      $(document).ready(function() {
          setImageArray(imageNames);
          getBackgroundImage();
-        mainWeather();
+         getSensorData();
      });
 </script>
 
@@ -41,7 +42,7 @@
                 <p id='weather-location'></p>
                 <div id="WeatherWrapper" class="col-xs-12 col-sm-6 weather-wrapper">
 					<p>
-						<input type="text" id="zip" placeholder="enter zip code, or leave blank to use IP" class="form-control mb-2 mr-sm-2 mb-sm-0" >
+						<input type="number" id="zip" placeholder="enter zip code, or leave blank to use IP" class="form-control mb-2 mr-sm-2 mb-sm-0" >
 						<button id="submitZip" onclick="getWeatherLocation()" class="btn btn-primary" style="margin: 15px;">Get Weather</button>
 					</p>					
                 </div>
