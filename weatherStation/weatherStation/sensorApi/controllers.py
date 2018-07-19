@@ -17,7 +17,7 @@ sensorApi = Blueprint('sensorApi', __name__)
 @sensorApi.route('/')
 def index():
     dth11Object = dht11.DTH11(8)	
-    for x in range(20):
+    for x in range(10):
 		result = dth11Object.read()
 		if result:
 			errorCode = result.errorCode

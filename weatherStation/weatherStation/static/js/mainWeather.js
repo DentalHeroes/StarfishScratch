@@ -38,8 +38,6 @@ function	getWeather(locationType) {
 			
 			//create the sensor data content and append it to the wrapper
 			wrapper.append(createWeatherWidg(data));
-
-			clearLoadingScreen();
 		},
 		error: function (error) {
 			alert('Failed!');
@@ -65,10 +63,6 @@ function clearLoadingScreen(){
 
 	// uses ajax call to get sensor data
 function    getSensorData() {
-	//bind the SensorDataWrapper element to a variable
-	var wrapper = $("#SensorDataWrapper");
-	//clear the wrapper of any content
-	wrapper.empty();
 	$.ajax({
 		// notice how the url is different. It doesn't include 'http://' which
 		// tells us that we're calling an API on our internal server.
@@ -87,7 +81,7 @@ function    getSensorData() {
 		error: function (error) {
 			alert('Failed!');			
 			//create refresh button
-			var button = '<p><button id="submitZip" onclick="getSensorData()" class="btn btn-primary" >Refresh</button></p>';
+			var button = '<p><button id="submitZip" onclick="refreshSensor()" class="btn btn-primary" >Refresh</button></p>';
 			//bind the SensorDataWrapper element to a variable
 			var wrapper = $("#SensorDataWrapper");
 			//clear the wrapper of any content
@@ -97,6 +91,26 @@ function    getSensorData() {
 		}
 	});
 }
+
+
+function refreshSensor(){
+	//bind the SensorDataWrapper element to a variable
+	var wrapper = $("#SensorDataWrapper");
+	//clear the wrapper of any content
+	wrapper.empty();
+	wrapper.append(getLoading());
+	getSensorData()
+	
+}
+	
+function getLoading(){
+return '<div id="SensorDataWrapper" class="col-xs-12">' +
+			 '<div id="loading" class="col-xs-12 col-sm-8">' +
+				'<span class="fas fa-spinner fa-spin"></span>' +
+				'<p>Loading...</p>' +
+			'</div>' +
+       '</div>';	
+}	
 	
 //Uses a switch statement to map different weather 
 //conditions to their appropriate weather icon
@@ -171,7 +185,7 @@ function	createSensorDataWidg(data) {
 			//if temp is zero then output zero, otherwise convert celcius to farenheit
 		   "<p>Temperature: " + (data.temp === 0 ? 0 : ((data.temp * 9 / 5) + 32).toFixed(2)) + " F</p>" +
 		   "<p>Humidity: " + data.humidity + "%</p>" +
-		   '<p><button id="submitZip" onclick="getSensorData()" class="btn btn-primary" >Refresh</button></p>';
+		   '<p><button id="submitZip" onclick="refreshSensor()" class="btn btn-primary" >Refresh</button></p>';
 }
 
 			// compares the current time to sunrise and sunset times
